@@ -15,7 +15,6 @@ class Request
             $this->data[$key] = $this->clean($item);
         }
     }
-
     /**
      * @param $value
      * @return string

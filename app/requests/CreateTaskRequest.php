@@ -22,7 +22,6 @@ class CreateTaskRequest extends Request
             && isset ($_FILES['image']['tmp_name']) && file_exists($_FILES['image']['tmp_name'])
             && getimagesize($_FILES['image']['tmp_name']) !== false
         ) {
-
             $image = $_FILES['image'];
             $image = new Image($image['name'], $image['type'], $image['tmp_name'], $image['size']);
 

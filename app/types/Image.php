@@ -40,7 +40,7 @@ class Image
     /**
      * @return mixed
      */
-    public function getType(): string
+    public function getMimeType(): string
     {
         return $this->type;
     }
@@ -59,5 +59,30 @@ class Image
     public function getSize(): string
     {
         return $this->size;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        switch ($this->type) {
+            case "image/png":
+                return '.png';
+            case "image/gif":
+                return '.gif';
+            case "image/jpg":
+                return '.jpg';
+            default:
+                return '.png';
+        }
+    }
+
+    /**
+     * @param string $path
+     */
+    public function setPath(string $path)
+    {
+        $this->path = $path;
     }
 }
