@@ -8,4 +8,9 @@ class ModelFactory
     {
         return new TaskModel();
     }
+
+    public static function getUserModel()
+    {
+        return new UserModel();
+    }
 }

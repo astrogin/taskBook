@@ -1,7 +1,13 @@
+<?php $user = $_SESSION['authUser'] || json_decode($_COOKIE['beejeeTaskUser']); ?>
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
   Create Task
 </button>
+<?php if (!$user) { ?>
+  <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#adminLogin">
+    Login For Admin
+  </button>
+<?php } ?>
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
@@ -45,6 +51,38 @@
   </div>
 </div>
 
+<div class="modal fade" id="adminLogin" tabindex="-1" role="dialog" aria-labelledby="adminLoginTitle"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create new task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <form action="/auth/login" method="post" id="loginUser">
+          <div class="form-group">
+            <label>Login</label>
+            <input type="text" class="form-control" name="login">
+            <label>Password</label>
+            <input type="text" class="form-control" name="password">
+          </div>
+        </form>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" form="loginUser" class="btn btn-primary">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="accordion" id="accordionExample">
     <?php foreach ($data['data'] as $key => $task) { ?>
       <div class="card">
@@ -57,6 +95,7 @@
             <img src="<?php echo $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/' . $task['image'] ?>"
                  height="320px" width="240px" alt="Image lost" />
           </div>
+          <div class="d-inline p-3 m-lg-1">Delete</div>
         </div>
         <div id="collapseThree<?php echo $key ?>" class="collapse show"
              aria-labelledby="headingThree" data-parent="#accordionExample">
