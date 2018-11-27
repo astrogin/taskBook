@@ -31,7 +31,7 @@ class TaskController
         $result = $task->create($newTask);
 
         if ($result) {
-            echo 'good';
+            redirect('/');
         }
 
     }

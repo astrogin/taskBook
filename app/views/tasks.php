@@ -2,7 +2,6 @@
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
   Create Task
 </button>
-<?php print_r($data); ?>
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
@@ -47,21 +46,44 @@
 </div>
 
 <div class="accordion" id="accordionExample">
-  <?php foreach ($data['data'] as $task) ?>
-  <div class="card">
-    <div class="card-header" id="headingThree" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-      <div class="d-inline bg-primary p-3 align-middle">First name: <?php echo $task['first_name'] ?></div>
-      <div class="d-inline bg-primary p-3">Last name: <?php echo $task['last_name'] ?></div>
-      <div class="d-inline bg-primary p-3">Email: <?php echo $task['email'] ?></div>
-      <div class="d-inline bg-primary p-3">Image:
-        <img src="/../<?php echo $task['image'] ?>" height="320px" width="240px" alt="Image lost" />
-        <?php echo "<img src='" . $task['image'] . "' height='320px' width='240px' alt='Image lost' />" ?>
+    <?php foreach ($data['data'] as $key => $task) { ?>
+      <div class="card">
+        <div class="card-header" id="headingThree" data-toggle="collapse" data-target="#collapseThree<?php echo $key ?>"
+             aria-expanded="true" aria-controls="collapseThree">
+          <div class="d-inline p-3 m-lg-5">First name: <?php echo $task['first_name'] ?></div>
+          <div class="d-inline p-3 m-lg-5">Last name: <?php echo $task['last_name'] ?></div>
+          <div class="d-inline p-3 m-lg-5">Email: <?php echo $task['email'] ?></div>
+          <div class="d-inline p-3 m-lg-5">Image:
+            <img src="<?php echo $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/' . $task['image'] ?>"
+                 height="320px" width="240px" alt="Image lost" />
+          </div>
+        </div>
+        <div id="collapseThree<?php echo $key ?>" class="collapse show"
+             aria-labelledby="headingThree" data-parent="#accordionExample">
+          <div class="card-body">
+            <h2>Description: </h2>
+              <?php echo $task['description'] ?>
+          </div>
+        </div>
       </div>
-    </div>
-    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-      <div class="card-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
-  </div>
+    <?php } ?>
 </div>
+
+<?php if (isset($data['pages'])) {
+    $page = 1; ?>
+  <nav aria-label="...">
+    <ul class="pagination pagination-lg float-right">
+        <?php while ($data['pages']) {
+            if ((int)filter_input(INPUT_GET, 'page', FILTER_SANITIZE_SPECIAL_CHARS) === $page) {
+                echo "<li class='page-item disabled'>
+                        <a class='page-link' href='/task/index?page=$page' tabindex='-1'>$page</a>
+                      </li>";
+            } else {
+                echo "<li class='page-item'><a class='page-link' href='/task/index?page=$page'>$page</a></li>";
+            }
+            $page++;
+            $data['pages']--;
+        } ?>
+    </ul>
+  </nav>
+<?php } ?>

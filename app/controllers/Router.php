@@ -14,7 +14,7 @@ class Router
      */
     public function __construct()
     {
-        $this->uri = explode('/', $_SERVER['REQUEST_URI']);
+        $this->uri = explode('/', explode('?', $_SERVER['REQUEST_URI'])[0]);
         array_shift($this->uri);
     }
 
@@ -23,6 +23,8 @@ class Router
      */
     public function handle()
     {
+        $this->handleStorageImages();
+
         if (!file_exists($this->getFile())) {
 
             throw new \Exception('file doesn\'t exist', 404);
@@ -87,5 +89,33 @@ class Router
             return strtolower($this->uri[1]);
         }
         return 'index';
+    }
+
+    private function handleStorageImages()
+    {
+        if (count($this->uri)
+            && array_key_exists(0, $this->uri)
+            && $this->uri[0] === 'storage'
+            && array_key_exists(1, $this->uri)
+            && strlen($this->uri[1]) > 1
+        ) {
+            $file = '../storage/' . $this->uri[1];
+
+            if (file_exists($file)) {
+                $size = getimagesize($file);
+
+                $fp = fopen($file, 'rb');
+
+                if ($size and $fp) {
+
+                    header('Content-Type: ' . $size['mime']);
+                    header('Content-Length: ' . filesize($file));
+
+                    fpassthru($fp);
+
+                    exit();
+                }
+            }
+        }
     }
 }
